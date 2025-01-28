@@ -1,2 +1,3 @@
 # Steiner-Tree-Problem-STPRBH
-trying to solve Steiner tree problem with revenue, budget and hop-constraints
+
+Code for solving Steiner tree problem with revenue, budget and hop-constraints (STPRBH)
