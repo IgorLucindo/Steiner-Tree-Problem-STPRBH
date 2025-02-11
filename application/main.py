@@ -20,6 +20,6 @@ J = get_solution_graph(model)
 
 # show graph
 show_graph(G)
-# show_graph(D)
-# show_graph(H)
+show_graph(D)
+show_graph(H)
 show_graph(J)
