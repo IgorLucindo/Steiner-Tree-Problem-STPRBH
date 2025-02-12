@@ -71,11 +71,9 @@ def get_solution_graph(model):
         var_name = var.varName
         value = var.x
 
-        if var_name[0] == 'x' and value > .5:
+        if var_name[0] == 'x' and value == 1:
             i, j = var_name[2:-1].split(",")
             D.add_edge(i, j)
-        # elif var_name[0] == 'y':
-        #     i = int(var_name[2])
 
     # return graph
     return D
@@ -91,9 +89,42 @@ def show_graph(G):
     # draw graph
     nx.draw(G, pos, with_labels=True)
 
-    # draw cost
+    # draw cost and revenue
     nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels, font_color='r')
     nx.draw_networkx_labels(G, pos_revenue, labels=node_labels, font_color='g')
     
     # show
+    plt.show()
+
+
+# show graphs
+def show_graphs(graphs):
+    # number of graphs
+    num_graphs = len(graphs)
+    # create subplots
+    _, axes = plt.subplots(1, num_graphs, figsize=(5 * num_graphs, 5))
+
+    # if there's only one graph, axes will not be an array, so we wrap it in a list
+    if num_graphs == 1:
+        axes = [axes]
+
+    # iterate over the graphs and draw them
+    for i, G in enumerate(graphs):
+        # get attributes
+        edge_labels = nx.get_edge_attributes(G, 'cost')
+        node_labels = nx.get_node_attributes(G, 'revenue')
+        # get position for every graph
+        pos = nx.spring_layout(G)
+        pos_revenue = {v: (x + .1, y) for v, (x, y) in pos.items()}
+
+        # draw graph
+        nx.draw(G, pos, with_labels=True, node_color='lightblue', edge_color='gray', node_size=500, width=2, ax=axes[i])
+        axes[i].set_title(f"Graph {i + 1}")
+
+        # draw cost and revenue
+        nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels, font_color='r', ax=axes[i])
+        nx.draw_networkx_labels(G, pos_revenue, labels=node_labels, font_color='g', ax=axes[i])
+
+    # show the figure
+    plt.tight_layout()
     plt.show()
