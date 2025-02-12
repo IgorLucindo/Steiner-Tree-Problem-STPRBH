@@ -6,7 +6,7 @@ from utils.solve_utils import *
 # budget
 b = 60
 # hop limit
-h = 1
+h = 2
 # directed graph
 G = graph_generator(6, 9)
 D = digraph_transformer(G)

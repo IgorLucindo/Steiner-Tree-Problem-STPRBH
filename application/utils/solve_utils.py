@@ -19,6 +19,7 @@ def base_model_sol(D, b):
     y['r'].lb = 1
     model.addConstrs((gp.quicksum(x[a] for a in D.in_edges(v)) == y[v] for v in D.nodes if v != 'r'), name='c1')
     model.addConstr((gp.quicksum(D.edges[a]['cost'] * x[a] for a in D.edges) <= b), name='c2')
+    model.addConstrs((x[u, v] + x[v, u] <= 1 for (u, v) in D.edges if 'r' not in {u, v}), name='c3')
 
     # solve
     model.optimize()
