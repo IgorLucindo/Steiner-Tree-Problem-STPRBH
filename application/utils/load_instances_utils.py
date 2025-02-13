@@ -13,6 +13,10 @@ def load_instance(file_path):
     line = linecache.getline(file_path, 17).strip()
     h = int(line[9:])
 
+    # number of vertices
+    line = linecache.getline(file_path, 13).strip()
+    num_of_vertices = int(line[6:])
+
     # number of edges
     line = linecache.getline(file_path, 14).strip()
     num_of_edges = int(line[6:])
@@ -44,7 +48,7 @@ def load_instance(file_path):
     nx.set_node_attributes(G, revenues, 'revenue')
 
     # return
-    return b, h, G
+    return b, h, G, num_of_vertices, num_of_edges
 
 
 # load all instances in instances folder
