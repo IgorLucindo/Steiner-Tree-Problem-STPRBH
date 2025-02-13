@@ -12,4 +12,4 @@ Enter the application folder through the following command:
 cd .\application\
 ```
 
-Now just run the file 'main.py'.
+Now just run the file ``main.py``.
