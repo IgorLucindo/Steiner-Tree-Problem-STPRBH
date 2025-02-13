@@ -7,6 +7,9 @@ def base_model_sol(D, b):
     # create model
     model = gp.Model(name="base model")
 
+    # Disable all output
+    model.setParam('OutputFlag', 0)
+
     # add variables
     x = model.addVars(D.edges, vtype=GRB.BINARY, name='x')
     y = model.addVars(D.nodes, vtype=GRB.BINARY, name='y')
@@ -20,6 +23,7 @@ def base_model_sol(D, b):
     model.addConstrs((gp.quicksum(x[a] for a in D.in_edges(v)) == y[v] for v in D.nodes if v != 'r'), name='c1')
     model.addConstr((gp.quicksum(D.edges[a]['cost'] * x[a] for a in D.edges) <= b), name='c2')
     model.addConstrs((x[u, v] + x[v, u] <= 1 for (u, v) in D.edges if 'r' not in {u, v}), name='c3')
+    model.addConstr((gp.quicksum(x['r', v] for v in D.successors('r')) >= 1), name='c4')
 
     # solve
     model.optimize()

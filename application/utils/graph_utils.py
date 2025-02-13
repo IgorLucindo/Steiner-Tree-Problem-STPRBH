@@ -1,4 +1,3 @@
-# change dijkstra to bfs
 import networkx as nx
 import random
 import matplotlib.pyplot as plt
@@ -53,8 +52,7 @@ def digraph_transformer(G):
 # removes vertices that have distance from vertex 'r' greater than h
 def hop_limit_graph_transformer(G, h):
     # Compute shortest path lengths from node r
-    # change dijkstra to bfs
-    shortest_paths = nx.single_source_dijkstra_path_length(G, 'r')
+    shortest_paths = nx.single_source_shortest_path_length(G, 'r')
 
     # Create a subgraph with nodes within the hop limit
     H = G.subgraph([node for node, dist in shortest_paths.items() if dist <= h]).copy()
@@ -120,7 +118,7 @@ def show_graphs(graphs):
         pos_revenue = {v: (x + .1, y) for v, (x, y) in pos.items()}
 
         # draw graph
-        nx.draw(G, pos, with_labels=True, node_color='lightblue', edge_color='gray', node_size=500, width=2, ax=axes[i])
+        nx.draw(G, pos, with_labels=True, node_color='lightblue', edge_color='gray', node_size=200, width=1, ax=axes[i])
         axes[i].set_title(f"Graph {i + 1}")
 
         # draw cost and revenue
