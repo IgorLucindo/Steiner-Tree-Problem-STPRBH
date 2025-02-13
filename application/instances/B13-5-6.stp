@@ -1,0 +1,166 @@
+33D32945 STP File, STP Format Version 1.0
+
+SECTION Comment
+Name    "Series B" 
+Creator "A. M. Costa" 
+Format  "Z.H. Fu and J. K. Hao"
+Remark  "Sparse graph with random weights"
+#TotalEdgeCost 717
+#BudgetFraction 5
+END 
+
+SECTION Graph 
+Nodes 100 
+Edges 125 
+Root 1
+Budget 143
+HopLimit 6
+E 1 32 6 
+E 1 38 8 
+E 1 62 6 
+E 2 83 6 
+E 2 84 10 
+E 3 98 4 
+E 4 5 5 
+E 4 46 8 
+E 4 65 3 
+E 5 19 7 
+E 5 84 10 
+E 5 90 4 
+E 5 91 6 
+E 6 7 4 
+E 6 58 10 
+E 6 85 9 
+E 7 8 3 
+E 7 36 6 
+E 8 27 2 
+E 8 81 2 
+E 9 11 9 
+E 9 69 6 
+E 10 34 10 
+E 10 61 5 
+E 10 70 9 
+E 10 90 1 
+E 11 41 9 
+E 11 58 1 
+E 11 63 4 
+E 11 97 2 
+E 12 59 8 
+E 12 74 4 
+E 13 35 1 
+E 13 53 3 
+E 13 70 6 
+E 13 86 4 
+E 14 16 10 
+E 14 18 1 
+E 14 64 5 
+E 15 33 8 
+E 15 68 8 
+E 15 93 8 
+E 16 91 6 
+E 17 44 10 
+E 18 74 4 
+E 19 23 1 
+E 19 44 1 
+E 19 70 3 
+E 19 74 3 
+E 19 79 7 
+E 19 85 10 
+E 19 99 4 
+E 20 46 4 
+E 20 95 1 
+E 21 44 1 
+E 22 67 1 
+E 23 42 3 
+E 24 32 4 
+E 25 30 10 
+E 26 46 10 
+E 27 87 5 
+E 28 76 1 
+E 28 92 8 
+E 29 54 7 
+E 30 59 6 
+E 31 91 1 
+E 32 66 6 
+E 32 84 9 
+E 33 90 2 
+E 35 48 10 
+E 35 57 3 
+E 36 55 6 
+E 37 50 1 
+E 37 87 10 
+E 38 85 5 
+E 38 92 10 
+E 39 53 1 
+E 40 59 3 
+E 40 77 6 
+E 43 65 4 
+E 44 98 9 
+E 45 60 8 
+E 46 78 3 
+E 47 84 4 
+E 48 53 2 
+E 49 64 10 
+E 49 75 9 
+E 50 85 6 
+E 50 95 5 
+E 51 64 10 
+E 52 84 5 
+E 54 71 8 
+E 54 85 6 
+E 55 60 4 
+E 55 100 10 
+E 56 67 8 
+E 57 87 10 
+E 57 91 5 
+E 58 70 6 
+E 59 64 10 
+E 60 79 8 
+E 60 86 8 
+E 60 98 5 
+E 61 68 2 
+E 63 83 4 
+E 63 91 10 
+E 64 85 8 
+E 65 67 4 
+E 66 67 1 
+E 68 72 7 
+E 68 82 6 
+E 68 96 10 
+E 70 80 5 
+E 71 72 2 
+E 72 84 1 
+E 72 93 9 
+E 72 96 8 
+E 73 80 6 
+E 73 84 9 
+E 78 79 7 
+E 79 87 1 
+E 79 92 9 
+E 84 89 6 
+E 87 94 10 
+E 88 99 5 
+END 
+
+SECTION ProfitableVertices 
+ProfitableVertices 17 
+PV 1 26
+PV 19 42
+PV 21 41
+PV 25 31
+PV 30 41
+PV 33 74
+PV 36 40
+PV 42 2
+PV 43 14
+PV 44 43
+PV 51 26
+PV 55 94
+PV 58 64
+PV 83 74
+PV 86 23
+PV 92 79
+PV 95 71
+END 
+
+EOF 

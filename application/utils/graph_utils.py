@@ -1,3 +1,4 @@
+# change dijkstra to bfs
 import networkx as nx
 import random
 import matplotlib.pyplot as plt
@@ -27,8 +28,8 @@ def graph_generator(n, m):
     G = nx.relabel_nodes(G, {0: 'r'})
 
     # add cost and revenue
-    costs = {e: random.randint(11, 20) for e in G.edges()}
-    revenues = {v: random.randint(1, 5) for v in G.nodes()}
+    costs = {e: random.randint(11, 20) for e in G.edges}
+    revenues = {v: random.randint(1, 5) for v in G.nodes}
     revenues['r'] = 0
     nx.set_edge_attributes(G, costs, 'cost')
     nx.set_node_attributes(G, revenues, 'revenue')
@@ -52,6 +53,7 @@ def digraph_transformer(G):
 # removes vertices that have distance from vertex 'r' greater than h
 def hop_limit_graph_transformer(G, h):
     # Compute shortest path lengths from node r
+    # change dijkstra to bfs
     shortest_paths = nx.single_source_dijkstra_path_length(G, 'r')
 
     # Create a subgraph with nodes within the hop limit
@@ -84,7 +86,7 @@ def show_graph(G):
     edge_labels = nx.get_edge_attributes(G, 'cost')
     node_labels = nx.get_node_attributes(G, 'revenue')
     pos = nx.spring_layout(G)
-    pos_revenue = {v: (x + .1, y) for v, (x, y) in pos.items()}
+    pos_revenue = {v: (x + .05, y) for v, (x, y) in pos.items()}
 
     # draw graph
     nx.draw(G, pos, with_labels=True)

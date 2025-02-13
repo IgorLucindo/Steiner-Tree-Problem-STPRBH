@@ -1,22 +1,24 @@
 from utils.graph_utils import *
 from utils.solve_utils import *
+from utils.load_instances_utils import *
 
 
-# set inputs
-# budget
-b = 60
-# hop limit
-h = 2
-# directed graph
-G = graph_generator(6, 9)
-D = digraph_transformer(G)
-H = hop_limit_graph_transformer(D, h)
+if __name__ == "__main__":
+    # get instances data
+    instances_data = load_instances()
 
-# solve problem
-model = base_model_sol(H, b)
+    # get inputs
+    b, h, G = instances_data[0]
 
-# create graph based on the results
-J = get_solution_graph(model)
+    # preprocess graph for model input
+    D = digraph_transformer(G)
+    H = hop_limit_graph_transformer(D, h)
 
-# show graphs
-show_graphs([G, D, H, J])
+    # solve problem
+    model = base_model_sol(H, b)
+
+    # create graph based on the results
+    J = get_solution_graph(model)
+
+    # show graphs
+    show_graphs([G, D, H, J])

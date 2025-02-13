@@ -1,0 +1,112 @@
+33D32945 STP File, STP Format Version 1.0
+
+SECTION Comment
+Name    "Series B" 
+Creator "A. M. Costa" 
+Format  "Z.H. Fu and J. K. Hao"
+Remark  "Sparse graph with random weights"
+#TotalEdgeCost 328
+#BudgetFraction 5
+END 
+
+SECTION Graph 
+Nodes 50 
+Edges 63 
+Root 1
+Budget 65
+HopLimit 6
+E 1 34 10 
+E 1 49 6 
+E 2 48 8 
+E 3 11 8 
+E 4 5 1 
+E 4 22 5 
+E 4 48 1 
+E 5 22 4 
+E 5 31 2 
+E 6 10 4 
+E 6 45 3 
+E 7 17 4 
+E 7 29 4 
+E 7 33 5 
+E 8 21 7 
+E 9 10 4 
+E 9 18 5 
+E 9 21 1 
+E 9 22 8 
+E 9 27 1 
+E 9 41 10 
+E 9 43 2 
+E 9 45 9 
+E 10 13 1 
+E 10 20 4 
+E 10 30 8 
+E 10 48 1 
+E 11 15 8 
+E 11 20 5 
+E 11 21 8 
+E 12 19 9 
+E 12 21 1 
+E 12 30 5 
+E 12 35 8 
+E 13 34 2 
+E 14 28 7 
+E 14 50 7 
+E 15 47 9 
+E 16 18 4 
+E 16 38 2 
+E 17 50 7 
+E 19 40 8 
+E 20 23 7 
+E 21 30 9 
+E 22 25 2 
+E 22 50 5 
+E 24 27 5 
+E 24 40 1 
+E 26 30 10 
+E 26 39 6 
+E 29 37 2 
+E 29 41 4 
+E 30 31 8 
+E 30 32 4 
+E 31 37 2 
+E 33 36 5 
+E 34 46 6 
+E 36 42 8 
+E 39 50 1 
+E 40 50 5 
+E 41 42 6 
+E 42 44 9 
+E 43 50 7 
+END 
+
+SECTION ProfitableVertices 
+ProfitableVertices 25 
+PV 1 69
+PV 2 4
+PV 4 51
+PV 9 82
+PV 10 6
+PV 12 49
+PV 13 78
+PV 15 37
+PV 16 13
+PV 20 48
+PV 24 82
+PV 25 18
+PV 28 37
+PV 32 49
+PV 34 91
+PV 36 98
+PV 37 73
+PV 38 86
+PV 39 18
+PV 41 22
+PV 42 35
+PV 44 21
+PV 48 68
+PV 49 9
+PV 50 61
+END 
+
+EOF 

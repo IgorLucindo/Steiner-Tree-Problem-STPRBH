@@ -1,0 +1,199 @@
+33D32945 STP File, STP Format Version 1.0
+
+SECTION Comment
+Name    "Series B" 
+Creator "A. M. Costa" 
+Format  "Z.H. Fu and J. K. Hao"
+Remark  "Sparse graph with random weights"
+#TotalEdgeCost 683
+#BudgetFraction 10
+END 
+
+SECTION Graph 
+Nodes 100 
+Edges 125 
+Root 1
+Budget 68
+HopLimit 9
+E 1 4 7 
+E 1 43 5 
+E 1 48 6 
+E 1 73 7 
+E 2 5 6 
+E 2 35 4 
+E 3 98 8 
+E 4 64 7 
+E 4 66 8 
+E 4 79 5 
+E 5 25 9 
+E 6 19 5 
+E 7 59 6 
+E 7 60 8 
+E 7 90 7 
+E 8 39 3 
+E 8 64 3 
+E 8 65 10 
+E 9 37 1 
+E 9 41 4 
+E 9 53 7 
+E 9 87 3 
+E 10 35 6 
+E 11 39 5 
+E 11 60 5 
+E 11 72 3 
+E 11 88 8 
+E 12 23 7 
+E 12 45 5 
+E 13 19 9 
+E 13 100 1 
+E 14 20 7 
+E 15 82 6 
+E 16 38 2 
+E 17 48 5 
+E 17 98 10 
+E 18 33 1 
+E 18 55 6 
+E 19 57 1 
+E 19 60 7 
+E 19 67 9 
+E 20 91 3 
+E 21 26 3 
+E 21 36 7 
+E 22 31 7 
+E 23 35 7 
+E 23 49 1 
+E 24 64 10 
+E 25 26 7 
+E 25 68 5 
+E 25 92 1 
+E 26 47 3 
+E 26 94 3 
+E 26 97 3 
+E 27 66 5 
+E 28 41 3 
+E 28 91 8 
+E 29 54 6 
+E 29 59 7 
+E 30 53 1 
+E 30 82 6 
+E 31 64 2 
+E 31 84 10 
+E 32 98 10 
+E 34 68 10 
+E 34 100 6 
+E 35 76 5 
+E 35 78 7 
+E 36 56 2 
+E 36 69 4 
+E 37 61 5 
+E 38 56 8 
+E 39 96 7 
+E 40 91 5 
+E 41 44 9 
+E 41 51 6 
+E 41 64 2 
+E 41 95 4 
+E 42 50 9 
+E 44 55 1 
+E 44 73 5 
+E 44 77 6 
+E 44 86 4 
+E 44 88 5 
+E 45 62 10 
+E 46 56 8 
+E 46 88 1 
+E 47 58 1 
+E 48 81 1 
+E 49 74 4 
+E 49 79 6 
+E 50 65 7 
+E 52 54 4 
+E 52 63 8 
+E 52 73 1 
+E 52 90 6 
+E 53 73 6 
+E 54 61 9 
+E 54 62 4 
+E 56 65 10 
+E 56 82 4 
+E 56 84 3 
+E 56 95 5 
+E 58 95 10 
+E 59 77 5 
+E 64 67 5 
+E 64 93 9 
+E 65 71 6 
+E 66 75 7 
+E 67 68 8 
+E 67 85 3 
+E 67 91 1 
+E 68 80 9 
+E 70 89 5 
+E 70 96 1 
+E 70 98 8 
+E 71 95 4 
+E 73 88 9 
+E 74 94 1 
+E 76 80 10 
+E 76 83 10 
+E 81 87 6 
+E 82 90 1 
+E 85 99 1 
+E 92 98 6 
+END 
+
+SECTION ProfitableVertices 
+ProfitableVertices 50 
+PV 1 93
+PV 5 12
+PV 6 81
+PV 7 16
+PV 10 24
+PV 11 53
+PV 12 98
+PV 16 38
+PV 17 67
+PV 18 11
+PV 19 71
+PV 20 42
+PV 23 69
+PV 24 44
+PV 27 30
+PV 28 77
+PV 29 29
+PV 30 1
+PV 31 35
+PV 32 9
+PV 35 2
+PV 36 95
+PV 42 31
+PV 43 98
+PV 45 14
+PV 47 20
+PV 48 10
+PV 50 53
+PV 51 94
+PV 53 48
+PV 55 68
+PV 56 21
+PV 57 27
+PV 59 30
+PV 61 86
+PV 66 24
+PV 67 70
+PV 73 92
+PV 74 80
+PV 77 31
+PV 79 46
+PV 80 60
+PV 81 92
+PV 82 61
+PV 88 84
+PV 90 75
+PV 91 45
+PV 94 55
+PV 95 59
+PV 100 84
+END 
+
+EOF 
