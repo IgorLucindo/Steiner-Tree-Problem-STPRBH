@@ -23,7 +23,7 @@ if __name__ == "__main__":
         model = base_model_sol(D, b)
 
         # create graph based on the results
-        O = get_solution_graph(model)
+        H = get_solution_graph(D, model)
 
         # get end time
         end_time = time.time()
@@ -35,6 +35,6 @@ if __name__ == "__main__":
 
         # show graphs
         # if i == 0:
-        #     show_graphs([G, D, O])
-        #     show_graphs([G, O])
+        #     # show_graphs([G, D, H])
+        #     show_graphs([G, H])
         #     break

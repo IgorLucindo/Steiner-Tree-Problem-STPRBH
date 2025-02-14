@@ -62,21 +62,19 @@ def hop_limit_graph_transformer(G, h):
 
 
 # create graph based on the results
-def get_solution_graph(model):
-    # create graph
-    D = nx.DiGraph()
+def get_solution_graph(D, model):
+    # add edges based on the variables, handle vertex 'r'
+    selected_edges = [
+        tuple(int(index) if index.isdigit() else index for index in var.varName[2:-1].split(","))
+        for var in model.getVars()
+        if var.varName[0] == 'x' and var.x > 0.5
+    ]
 
-    # add edges based on the variables
-    for var in model.getVars():
-        var_name = var.varName
-        value = var.x
-
-        if var_name[0] == 'x' and value == 1:
-            i, j = var_name[2:-1].split(",")
-            D.add_edge(i, j)
+    # create subgraph of D with selected edges
+    H = D.edge_subgraph(selected_edges).copy()
 
     # return graph
-    return D
+    return H
 
 
 # show graph
