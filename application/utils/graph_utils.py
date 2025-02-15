@@ -1,7 +1,8 @@
 import networkx as nx
 import random
 import matplotlib.pyplot as plt
-from collections import Counter
+from collections import Counter, deque
+
 
 
 # graph generator
@@ -51,15 +52,43 @@ def digraph_transformer(G):
 
 
 # removes vertices that have distance from vertex 'r' greater than h
-def hop_limit_graph_transformer(G, h):
+def bfs_remove_vertices(D, h):
     # compute shortest path lengths from node r
-    shortest_paths = nx.single_source_shortest_path_length(G, 'r')
+    shortest_paths = nx.single_source_shortest_path_length(D, 'r')
 
     # create a subgraph with nodes within the hop limit
-    H = G.subgraph([node for node, dist in shortest_paths.items() if dist <= h]).copy()
+    H = D.subgraph([v for v, dist in shortest_paths.items() if dist <= h]).copy()
 
     # return limited graph
     return H
+
+
+# removes arcs that have distance from vertex 'r' greater than h
+def bfs_remove_arcs(D, h):
+    # bfs algorithm for removing arcs
+    queue = deque(['r'])
+    dist_vertex = {'r': 0}
+
+    # remove all arcs by default
+    nx.set_edge_attributes(D, {a: True for a in D.edges}, 'removed')
+
+    while queue:
+        v = queue.popleft()
+
+        # break if exceeds h hops
+        if dist_vertex[v] == h:
+            break
+
+        # iterate for each outgoing neighbor of v
+        for v_n in D.successors(v):
+            D.edges[(v, v_n)]['removed'] = False
+            
+            if v_n not in dist_vertex:
+                dist_vertex[v_n] = dist_vertex[v] + 1
+                queue.append(v_n)
+
+    # return limited graph
+    return D
 
 
 # create graph based on the results
