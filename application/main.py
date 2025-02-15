@@ -30,7 +30,7 @@ def main():
         # run model in instance
         # preprocess graph for model input
         D = digraph_transformer(G)
-        D = hop_limit_graph_transformer(D, h)
+        D = bfs_remove_vertices(D, h)
 
         # solve problem
         model, modelname = base_model_sol(D, b)
