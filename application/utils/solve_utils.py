@@ -29,4 +29,5 @@ def base_model_sol(D, b):
     model.optimize()
 
     # return model
-    return model
+    modelname = "Base Model"
+    return model, modelname

@@ -1,6 +1,7 @@
 import networkx as nx
 import random
 import matplotlib.pyplot as plt
+from collections import Counter
 
 
 # graph generator
@@ -77,6 +78,14 @@ def get_solution_graph(D, model):
     return H
 
 
+# count number of cycle type (2-cycle, 3-cycle, 4-cycle, ...) and returns a dict
+def count_cycle_type(D, count_flag):
+    if not count_flag:
+        return
+    
+    return dict(Counter(len(cycle) for cycle in nx.simple_cycles(D)))
+
+
 # show graph
 def show_graph(G):
     edge_labels = nx.get_edge_attributes(G, 'cost')
@@ -96,7 +105,10 @@ def show_graph(G):
 
 
 # show graphs
-def show_graphs(graphs):
+def show_graphs(graphs, plot_flag=True):
+    if not plot_flag:
+        return
+
     # number of graphs
     num_graphs = len(graphs)
     # create subplots

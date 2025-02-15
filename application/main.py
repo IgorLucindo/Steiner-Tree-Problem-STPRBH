@@ -5,14 +5,27 @@ from utils.results_utils import *
 import time
 
 
-if __name__ == "__main__":
+# set main parameters
+PLOT_GRAPH = False
+SAVE_CYCLE_RESULTS = True
+
+
+def main():
     # get instances data
     instances_data = load_instances()
 
+    # create results variable
+    model_results = []
+    cycle_counter_results = []
+
+    # get start time
+    start_time = time.time()
+
     #  iterate for every instance data
     for i, (b, h, G, num_of_vertices, num_of_edges) in enumerate(instances_data):
-        # get start time
-        start_time = time.time()
+        # get current time
+        current_time = time.time()
+
 
         # run model in instance
         # preprocess graph for model input
@@ -20,21 +33,41 @@ if __name__ == "__main__":
         D = hop_limit_graph_transformer(D, h)
 
         # solve problem
-        model = base_model_sol(D, b)
+        model, modelname = base_model_sol(D, b)
 
         # create graph based on the results
         H = get_solution_graph(D, model)
 
+
         # get end time
         end_time = time.time()
         # get iteration time
-        iteration_time = end_time - start_time
+        iteration_time = end_time - current_time
+        # get total time
+        total_time = current_time - start_time
 
-        # show results
-        show_instance_results(i, num_of_vertices, num_of_edges, iteration_time)
+
+        # append model results
+        model_results.append([num_of_vertices, num_of_edges, iteration_time])
+
+        # append number of each cycle type to results
+        cycle_counter_results.append(count_cycle_type(H, SAVE_CYCLE_RESULTS))
+
+
+        # print diagnosis
+        print_instance_diagnosis(i, total_time)
 
         # show graphs
-        # if i == 0:
-        #     # show_graphs([G, D, H])
-        #     show_graphs([G, H])
+        show_graphs([G, D, H], PLOT_GRAPH)
+
+        # break soon
+        # if i == 10:
         #     break
+
+    # save results
+    save_model_results(model_results, modelname)
+    save_cycle_results(cycle_counter_results, modelname, SAVE_CYCLE_RESULTS)
+
+
+if __name__ == "__main__":
+    main()
