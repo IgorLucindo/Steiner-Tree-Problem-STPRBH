@@ -58,7 +58,7 @@ def main():
         print_instance_diagnosis(i, total_time)
 
         # show graphs
-        show_graphs([G, D, H], PLOT_GRAPH)
+        show_graphs([G, H], PLOT_GRAPH)
 
         # break soon
         # if i == 10:

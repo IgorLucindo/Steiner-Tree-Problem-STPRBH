@@ -43,7 +43,7 @@ def digraph_transformer(G):
     D = nx.DiGraph(G)
 
     # Remove edges that are directed towards the root vertex r
-    edges_to_remove = [(u, v) for u, v in D.edges() if v == 'r']
+    edges_to_remove = [a for a in D.in_edges('r')]
     D.remove_edges_from(edges_to_remove)
 
     # return directed graph
@@ -52,10 +52,10 @@ def digraph_transformer(G):
 
 # removes vertices that have distance from vertex 'r' greater than h
 def hop_limit_graph_transformer(G, h):
-    # Compute shortest path lengths from node r
+    # compute shortest path lengths from node r
     shortest_paths = nx.single_source_shortest_path_length(G, 'r')
 
-    # Create a subgraph with nodes within the hop limit
+    # create a subgraph with nodes within the hop limit
     H = G.subgraph([node for node, dist in shortest_paths.items() if dist <= h]).copy()
 
     # return limited graph
