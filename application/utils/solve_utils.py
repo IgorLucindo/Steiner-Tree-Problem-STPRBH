@@ -25,6 +25,7 @@ def base_model_sol(D, b):
     model.addConstr((gp.quicksum(D.edges[a]['cost'] * x[a] for a in D.edges) <= b), name='c2')
     model.addConstrs((x[u, v] <= y[u] for (u, v) in D.edges), name='c3')
     model.addConstrs((x[u, v] + x[v, u] <= 1 for (u, v) in D.edges if 'r' not in {u, v}), name='c4')
+    # model.addConstrs((x[u, v] + x[v, u] <= 1 for (u, v) in D.edges if 'r' not in {u, v}), name='c5') # remove 3-cylcle
 
     # solve
     model.optimize()

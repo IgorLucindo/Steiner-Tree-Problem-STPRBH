@@ -57,7 +57,7 @@ def bfs_remove_vertices(D, h):
     shortest_paths = nx.single_source_shortest_path_length(D, 'r')
 
     # create a subgraph with nodes within the hop limit
-    H = D.subgraph([v for v, dist in shortest_paths.items() if dist <= h]).copy()
+    H = D.subgraph([v for v, dist in shortest_paths.items() if dist <= h])
 
     # return limited graph
     return H
@@ -65,30 +65,53 @@ def bfs_remove_vertices(D, h):
 
 # removes arcs that have distance from vertex 'r' greater than h
 def bfs_remove_arcs(D, h):
+    # Hamid's idea
+    # compute shortest path lengths from node r
+    shortest_paths = nx.single_source_shortest_path_length(D, 'r')
+
+    remained_vertices = [vertex for vertex in D.nodes if (shortest_paths[vertex] < h) or (shortest_paths[vertex] == h and D.nodes[vertex]['revenue'] > 0.5)]
+
+    # create a subgraph with vertices within the hop limit and last vertice are profitable
+    H = D.subgraph(remained_vertices)
+
+    # remove outgoing arcs of vertices with dist == h
+    for arc in H.edges:
+        H.edges[arc]['removed'] = False
+
+    shortest_paths = nx.single_source_shortest_path_length(H, 'r')
+
+    stop_vertices = [vertex for vertex in shortest_paths if shortest_paths[vertex] == h]
+
+    for vertex in stop_vertices:
+        for arc in H.out_edges(vertex):
+            H.edges[arc]['removed'] = True
+
+    return H
+
     # bfs algorithm for removing arcs
-    queue = deque(['r'])
-    dist_vertex = {'r': 0}
+    # queue = deque(['r'])
+    # dist_vertex = {'r': 0}
 
-    # remove all arcs by default
-    nx.set_edge_attributes(D, {a: True for a in D.edges}, 'removed')
+    # # remove all arcs by default
+    # nx.set_edge_attributes(D, {a: True for a in D.edges}, 'removed')
 
-    while queue:
-        v = queue.popleft()
+    # while queue:
+    #     v = queue.popleft()
 
-        # break if exceeds h hops
-        if dist_vertex[v] == h:
-            break
+    #     # break if exceeds h hops
+    #     if dist_vertex[v] == h:
+    #         break
 
-        # iterate for each outgoing neighbor of v
-        for v_n in D.successors(v):
-            D.edges[(v, v_n)]['removed'] = False
+    #     # iterate for each outgoing neighbor of v
+    #     for v_n in D.successors(v):
+    #         D.edges[(v, v_n)]['removed'] = False
             
-            if v_n not in dist_vertex:
-                dist_vertex[v_n] = dist_vertex[v] + 1
-                queue.append(v_n)
+    #         if v_n not in dist_vertex:
+    #             dist_vertex[v_n] = dist_vertex[v] + 1
+    #             queue.append(v_n)
 
-    # return limited graph
-    return D
+    # # return limited graph
+    # return D
 
 
 # create graph based on the results
@@ -150,7 +173,7 @@ def show_graphs(graphs, plot_flag=True):
         node_labels = nx.get_node_attributes(G, 'revenue')
         # get position for every graph
         pos = nx.spring_layout(G)
-        pos_revenue = {v: (x + .1, y) for v, (x, y) in pos.items()}
+        pos_revenue = {v: (x + .05, y) for v, (x, y) in pos.items()}
 
         # draw graph
         nx.draw(G, pos, with_labels=True, node_color='lightblue', edge_color='gray', node_size=200, width=1, ax=axes[i])

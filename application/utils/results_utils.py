@@ -39,7 +39,8 @@ def save_preprocess_results(results):
         ("Graph1", "m1"),
         ("Graph2", "n2"),
         ("Graph2", "m2"),
-        ("Dec (%)", "")
+        ("Vertex Dec. (%)", ""),
+        ("Arc Dec. (%)", "")
     ])
     df.index = df.index + 1
     df.to_excel(f"results/preprocess/results.xlsx", index=True, index_label="Instance")

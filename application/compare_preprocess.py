@@ -4,6 +4,10 @@ from utils.results_utils import *
 import time
 
 
+# set main parameters
+PLOT_GRAPH = False
+
+
 def main():
     # get instances data
     instances_data = load_instances()
@@ -33,18 +37,24 @@ def main():
         # append results
         D2_arcs = [a for a in D2.edges if not D2.edges[a]['removed']]
         D2_vertices = {v for a in D2_arcs for v in a}
+        vertex_dec = (len(D1.nodes) - len(D2_vertices))/len(D1.nodes)*100
         arc_dec = (len(D1.edges) - len(D2_arcs))/len(D1.edges)*100
         preprocess_results.append([
             len(D1.nodes),
             len(D1.edges),
             len(D2_vertices),
             len(D2_arcs),
+            vertex_dec,
             arc_dec
         ])
 
 
         # print diagnosis
         print_instance_diagnosis(i, total_time)
+
+
+        # show graphs
+        show_graphs([G, D2], PLOT_GRAPH)
 
         # break soon
         # if i == 10:

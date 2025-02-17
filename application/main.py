@@ -7,7 +7,7 @@ import time
 
 # set main parameters
 PLOT_GRAPH = False
-SAVE_CYCLE_RESULTS = True
+SAVE_CYCLE_RESULTS = False
 
 
 def main():
