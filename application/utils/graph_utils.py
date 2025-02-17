@@ -92,16 +92,12 @@ def bfs_remove_arcs(D, h):
 
 
 # create graph based on the results
-def get_solution_graph(D, model):
-    # add edges based on the variables, handle vertex 'r'
-    selected_edges = [
-        tuple(int(index) if index.isdigit() else index for index in var.varName[2:-1].split(","))
-        for var in model.getVars()
-        if var.varName[0] == 'x' and var.x > 0.5
-    ]
-
-    # create subgraph of D with selected edges
-    H = D.edge_subgraph(selected_edges).copy()
+def get_solution_graph(D, x):
+    # add edges based on the variables
+    selected_arcs = [a for a in D.edges if x[a].x > 0.5]
+    
+    # # create subgraph of D with selected edges
+    H = D.edge_subgraph(selected_arcs)
 
     # return graph
     return H

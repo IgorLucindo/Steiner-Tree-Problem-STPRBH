@@ -32,11 +32,8 @@ def main():
         D = digraph_transformer(G)
         D = bfs_remove_vertices(D, h)
 
-        # solve problem
-        model, modelname = base_model_sol(D, b)
-
-        # create graph based on the results
-        H = get_solution_graph(D, model)
+        # solve problem and get solution graph
+        H, modelname = base_model_sol(D, b)
 
 
         # get end time
