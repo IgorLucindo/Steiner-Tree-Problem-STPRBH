@@ -63,13 +63,13 @@ def bfs_remove_vertices(D, h):
     return H
 
 
-# removes arcs that have distance from vertex 'r' greater than h
-def bfs_remove_arcs(D, h):
+# remove last arcs due to hop-limit and non profitable vertices with dist == h
+def remove_last_arcs_and_non_profitable_last_vertices(D, h):
     # Hamid's idea
     # compute shortest path lengths from node r
     shortest_paths = nx.single_source_shortest_path_length(D, 'r')
 
-    remained_vertices = [vertex for vertex in D.nodes if (shortest_paths[vertex] < h) or (shortest_paths[vertex] == h and D.nodes[vertex]['revenue'] > 0.5)]
+    remained_vertices = [v for v in D.nodes if (shortest_paths[v] < h) or (shortest_paths[v] == h and D.nodes[v]['revenue'] > 0.5)]
 
     # create a subgraph with vertices within the hop limit and last vertice are profitable
     H = D.subgraph(remained_vertices)
@@ -80,38 +80,84 @@ def bfs_remove_arcs(D, h):
 
     shortest_paths = nx.single_source_shortest_path_length(H, 'r')
 
-    stop_vertices = [vertex for vertex in shortest_paths if shortest_paths[vertex] == h]
+    stop_vertices = [v for v in shortest_paths if shortest_paths[v] == h]
 
-    for vertex in stop_vertices:
-        for arc in H.out_edges(vertex):
-            H.edges[arc]['removed'] = True
+    for v in stop_vertices:
+        for a in H.out_edges(v):
+            H.edges[a]['removed'] = True
 
+    # return graph
     return H
 
+
+# get simplicials, remove its non profitable vertices
+def prune_simplicials(D):
+    all_simplicials = {}
+
+    for v in D.nodes:
+        neighbors = list(D.neighbors(v))
+        possible_clique_vertices = [v] + neighbors
+
+        stem_count = 0
+        for neighbor in neighbors:
+            # # if v neighbor is a stem
+            # print(set([neighbor] + list(D.neighbors(neighbor))))
+            # print(possible_clique_vertices)
+            if set([neighbor] + list(D.neighbors(neighbor))) != set(possible_clique_vertices):
+                stem = neighbor
+                stem_count += 1
+
+                # if is not a stem vertex, break
+                if stem_count > 1:
+                    break
+        # if there is only one stem, them v is a simplicial vertex
+        if stem_count == 1:
+            all_simplicials[stem] = possible_clique_vertices
+            # do something to remove the (possible_clique_vertices) from the (for v in D.nodes)
+
+    print(all_simplicials)
+             
+    # return simplyfied graph
+    return D
+
+
+# removes arcs that have distance from vertex 'r' greater than h
+def bfs_remove_arcs(D, h):
     # bfs algorithm for removing arcs
-    # queue = deque(['r'])
-    # dist_vertex = {'r': 0}
+    queue = deque(['r'])
+    dist_vertex = {'r': 0}
 
-    # # remove all arcs by default
-    # nx.set_edge_attributes(D, {a: True for a in D.edges}, 'removed')
+    # remove all arcs by default
+    nx.set_edge_attributes(D, {a: True for a in D.edges}, 'removed')
 
-    # while queue:
-    #     v = queue.popleft()
+    while queue:
+        v = queue.popleft()
 
-    #     # break if exceeds h hops
-    #     if dist_vertex[v] == h:
-    #         break
+        # break if exceeds h hops
+        if dist_vertex[v] == h:
+            break
 
-    #     # iterate for each outgoing neighbor of v
-    #     for v_n in D.successors(v):
-    #         D.edges[(v, v_n)]['removed'] = False
+        # iterate for each outgoing neighbor of v
+        for v_n in D.successors(v):
+            D.edges[(v, v_n)]['removed'] = False
             
-    #         if v_n not in dist_vertex:
-    #             dist_vertex[v_n] = dist_vertex[v] + 1
-    #             queue.append(v_n)
+            if v_n not in dist_vertex:
+                dist_vertex[v_n] = dist_vertex[v] + 1
+                queue.append(v_n)
 
-    # # return limited graph
-    # return D
+    # return hop-limited graph
+    return D
+
+
+# preprocess graph for model input
+def preproccess_graph(G, h):
+    # preprocess
+    D = digraph_transformer(G)
+    D = bfs_remove_arcs(D, h)
+    D = prune_simplicials(D)
+
+    # return preprocessed graph
+    return D
 
 
 # create graph based on the results
