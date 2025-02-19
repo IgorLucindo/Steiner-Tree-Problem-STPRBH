@@ -92,30 +92,15 @@ def remove_last_arcs_and_non_profitable_last_vertices(D, h):
 
 # get simplicials, remove its non profitable vertices
 def prune_simplicials(D):
-    all_simplicials = {}
+    # get simplicials
+    simplicials = {}
+    for v in D.nodes():
+        # Check if v is simplicial
+        neighbors = list(set(D.successors(v)) | set(D.predecessors(v)))
+        if is_clique(D, neighbors):
+            simplicials[v] = neighbors
 
-    for v in D.nodes:
-        neighbors = list(D.neighbors(v))
-        possible_clique_vertices = [v] + neighbors
-
-        stem_count = 0
-        for neighbor in neighbors:
-            # # if v neighbor is a stem
-            # print(set([neighbor] + list(D.neighbors(neighbor))))
-            # print(possible_clique_vertices)
-            if set([neighbor] + list(D.neighbors(neighbor))) != set(possible_clique_vertices):
-                stem = neighbor
-                stem_count += 1
-
-                # if is not a stem vertex, break
-                if stem_count > 1:
-                    break
-        # if there is only one stem, them v is a simplicial vertex
-        if stem_count == 1:
-            all_simplicials[stem] = possible_clique_vertices
-            # do something to remove the (possible_clique_vertices) from the (for v in D.nodes)
-
-    print(all_simplicials)
+    print(simplicials)
              
     # return simplyfied graph
     return D
@@ -158,6 +143,14 @@ def preproccess_graph(G, h):
 
     # return preprocessed graph
     return D
+
+# check if vertices form a clique in directed graph D
+def is_clique(D, vertices):
+    n = len(vertices)
+    # simple subgraph of vertices
+    G = nx.Graph(D.subgraph(vertices))
+    # return
+    return G.size() == n*(n - 1)/2
 
 
 # create graph based on the results
