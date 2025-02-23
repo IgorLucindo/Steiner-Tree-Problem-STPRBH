@@ -75,9 +75,6 @@ def remove_last_arcs_and_non_profitable_last_vertices(D, h):
     H = D.subgraph(remained_vertices)
 
     # remove outgoing arcs of vertices with dist == h
-    for arc in H.edges:
-        H.edges[arc]['removed'] = False
-
     shortest_paths = nx.single_source_shortest_path_length(H, 'r')
 
     stop_vertices = [v for v in shortest_paths if shortest_paths[v] == h]
@@ -92,17 +89,25 @@ def remove_last_arcs_and_non_profitable_last_vertices(D, h):
 
 # get simplicials, remove its non profitable vertices
 def prune_simplicials(D):
-    # get simplicials
-    simplicials = {}
-    for v in D.nodes():
-        # Check if v is simplicial
-        neighbors = list(set(D.successors(v)) | set(D.predecessors(v)))
-        if is_clique(D, neighbors):
-            simplicials[v] = neighbors
+    for v in D.nodes:
+        # skip if v is profitable or is the root
+        if D.nodes[v]['revenue'] != 0 or v == 'r':
+            continue
 
-    print(simplicials)
+        # check if v is simplicial and get clique G (simple graph)
+        neighbors = list(set(D.successors(v)) | set(D.predecessors(v)))
+        forms_clique, G = is_clique(D, neighbors)
+
+        # if is clique
+        if forms_clique:
+            neighbor_costs = sum([G.edges[a]['cost'] for a in G.edges])
+            simplicial_edge_costs = sum(D.edges[u, v]['cost'] for u in neighbors)
+
+            # remove simplicial if it will never be accessed
+            if simplicial_edge_costs >= neighbor_costs:
+                D.nodes[v]['removed'] = True
              
-    # return simplyfied graph
+    # return graph
     return D
 
 
@@ -146,11 +151,35 @@ def preproccess_graph(G, h):
 
 # check if vertices form a clique in directed graph D
 def is_clique(D, vertices):
+    # number of vertices
     n = len(vertices)
+
     # simple subgraph of vertices
     G = nx.Graph(D.subgraph(vertices))
-    # return
-    return G.size() == n*(n - 1)/2
+
+    # return if is clique and the clique G
+    if G.size() == n*(n - 1)/2:
+        return True, G
+    else:
+        return False, None
+
+
+# remove edges with attribute 'remove: True
+def delete_removed_edges_vertices(D):
+    # filter vertices where 'removed': False
+    vertices = [v for v in D.nodes if D.nodes[v]['removed'] == False]
+
+    # create subgraph
+    D = D.subgraph(vertices)
+
+    # filter edges where 'removed': False
+    edges = [a for a in D.edges if D.edges[a]['removed'] == False]
+
+    # create subgraph
+    D = D.edge_subgraph(edges)
+
+    # return new graph
+    return D
 
 
 # create graph based on the results

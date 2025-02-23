@@ -5,7 +5,7 @@ from utils.results_utils import *
 import time
 
 
-# set main parameters
+# set parameter flags
 PLOT_GRAPH = False
 SAVE_CYCLE_RESULTS = False
 
@@ -29,8 +29,8 @@ def main():
 
         # run model in instance
         # preprocess graph for model input
-        D = digraph_transformer(G)
-        D = bfs_remove_vertices(D, h)
+        D = preproccess_graph(G, h)
+        D = delete_removed_edges_vertices(D)
 
         # solve problem and get solution graph
         H, modelname = base_model_sol(D, b)

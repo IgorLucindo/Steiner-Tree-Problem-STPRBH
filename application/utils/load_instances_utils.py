@@ -47,12 +47,20 @@ def load_instance(file_path):
     # add revenue to graph
     nx.set_node_attributes(G, revenues, 'revenue')
 
+    # set removed vertices
+    nx.set_node_attributes(G, {v: False for v in G.nodes}, 'removed')
+
+    # set removed edges
+    nx.set_edge_attributes(G, {e: False for e in G.edges}, 'removed')
+
     # return
     return b, h, G, num_of_vertices, num_of_edges
 
 
 # load all instances in instances folder
 def load_instances():
+    print("loading  instances ...")
+    
     # get stp files (instances)
     folder_path = Path("instances")
     file_paths = list(folder_path.glob("*.stp"))

@@ -4,7 +4,7 @@ from utils.results_utils import *
 import time
 
 
-# set main parameters
+# set parameter flags
 PLOT_GRAPH = False
 
 
@@ -23,27 +23,26 @@ def main():
         # get current time
         current_time = time.time()
 
-
         # run model in instance
-        # preprocess graph for model input
-        D = digraph_transformer(G)
-        D1 = bfs_remove_vertices(D, h)
-        D2 = bfs_remove_arcs(D, h)
+        # preprocess graphs
+        D1 = digraph_transformer(G)
+        D1 = bfs_remove_vertices(D1, h)
+
+        D2 = preproccess_graph(G, h)
+        D2 = delete_removed_edges_vertices(D2)
 
         # get total time
         total_time = current_time - start_time
 
         
         # append results
-        D2_arcs = [a for a in D2.edges if not D2.edges[a]['removed']]
-        D2_vertices = {v for a in D2_arcs for v in a}
-        vertex_dec = (len(D1.nodes) - len(D2_vertices))/len(D1.nodes)*100
-        arc_dec = (len(D1.edges) - len(D2_arcs))/len(D1.edges)*100
+        vertex_dec = (len(D1.nodes) - len(D2.nodes))/len(D1.nodes)*100
+        arc_dec = (len(D1.edges) - len(D2.edges))/len(D1.edges)*100
         preprocess_results.append([
             len(D1.nodes),
             len(D1.edges),
-            len(D2_vertices),
-            len(D2_arcs),
+            len(D2.nodes),
+            len(D2.edges),
             vertex_dec,
             arc_dec
         ])
