@@ -32,6 +32,9 @@ def create_graph_instance():
     # set removed vertices
     nx.set_node_attributes(G, {v: False for v in G.nodes}, 'removed')
 
+    # set removed edges
+    nx.set_edge_attributes(G, {e: False for e in G.edges}, 'removed')
+
     # return graph
     return G
 

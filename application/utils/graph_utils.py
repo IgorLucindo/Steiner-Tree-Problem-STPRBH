@@ -51,8 +51,8 @@ def digraph_transformer(G):
     return D
 
 
-# removes vertices that have distance from vertex 'r' greater than h
-def bfs_remove_vertices(D, h):
+# hop-limit last vertices
+def hop_limit_vertices(D, h):
     # compute shortest path lengths from node r
     shortest_paths = nx.single_source_shortest_path_length(D, 'r')
 
@@ -60,8 +60,8 @@ def bfs_remove_vertices(D, h):
     return D.subgraph([v for v, dist in shortest_paths.items() if dist <= h])
 
 
-# remove last arcs due to hop-limit and non profitable stop vertices
-def remove_last_arcs_and_non_profitable_last_vertices(D, h):
+# hop-limit last vertices and arcs, remove non profitable stop vertices
+def hop_limit_arcs(D, h):
     # Hamid's idea
     # compute shortest path lengths from node r
     shortest_paths = nx.single_source_shortest_path_length(D, 'r')
@@ -85,8 +85,45 @@ def remove_last_arcs_and_non_profitable_last_vertices(D, h):
     return D.subgraph(remained_vertices)
 
 
-# get simplicials, remove its non profitable vertices
+# get simplicials dict
+# keys are the stems of a clique, value are non-porfitable simplicials
+def get_simplicials(D):
+    # create simplicial dict
+    simplicials_dict = {}
+
+    for v in D.nodes:
+        # skip if v is profitable or is the root
+        if D.nodes[v]['revenue'] != 0 or v == 'r':
+            continue
+
+        # check if v is simplicial and get clique G (simple graph)
+        neighbors = list(set(D.successors(v)) | set(D.predecessors(v)))
+
+        # simple subgraph of neighbors
+        G = nx.Graph(D.subgraph(neighbors))
+
+        # if is clique
+        if is_clique(G):
+            # get stems from clique
+            stems = get_stems_from_clique(D, neighbors)
+            simplicials_dict.setdefault(tuple(stems), []).append(v)
+
+    # get number of 1-stems, 2-stems, ...
+    simplicials_dict['number'] = len(simplicials_dict)
+             
+    # return prunded graph
+    return simplicials_dict
+
+
+# remove appropriated simplicials
 def prune_simplicials(D):
+    # cases that non-profitable simplicial v cannot be removed:
+    # case 1: path from stem u_i to stem u_j passes through v
+    # case 2: path from stem u_i to profitable simplicial v_j passes through v
+
+    # cases that non-profitable simplicials can be removed
+    # clique has 1 stem and only non profitable simplicials
+
     for v in D.nodes:
         # skip if v is profitable or is the root
         if D.nodes[v]['revenue'] != 0 or v == 'r':
@@ -109,58 +146,35 @@ def prune_simplicials(D):
     return D
 
 
-# removes arcs that have distance from vertex 'r' greater than h
-def bfs_remove_arcs(D, h):
-    # bfs algorithm for removing arcs
-    queue = deque(['r'])
-    dist_vertex = {'r': 0}
-
-    # remove all arcs by default
-    nx.set_edge_attributes(D, {a: True for a in D.edges}, 'removed')
-
-    while queue:
-        v = queue.popleft()
-
-        # break if exceeds h hops
-        if dist_vertex[v] == h:
-            break
-
-        # iterate for each outgoing neighbor of v
-        for v_n in D.successors(v):
-            D.edges[(v, v_n)]['removed'] = False
-            
-            if v_n not in dist_vertex:
-                dist_vertex[v_n] = dist_vertex[v] + 1
-                queue.append(v_n)
-
-    # return prunded graph
-    return D
-
-
 # preprocess graph for model input
 def preproccess_graph(G, h):
     # preprocess
     D = digraph_transformer(G)
-    # D = bfs_remove_arcs(D, h)
-    D = remove_last_arcs_and_non_profitable_last_vertices(D, h)
-    D = prune_simplicials(D)
+    D = hop_limit_arcs(D, h)
+    simplicials_dict = get_simplicials(D)
+    print(simplicials_dict)
+    # D = prune_simplicials(simplicials_dict)
 
     # return preprocessed graph
     return D
 
-# check if vertices form a clique in directed graph D
-def is_clique(D, vertices):
+
+# check if G is clique
+def is_clique(G):
+    # number of vertices
+    n = len(G.nodes)
+
+    # return if G is clique
+    return G.size() == n*(n - 1)/2
+
+
+# get stems vertices from clique graph
+def get_stems_from_clique(D, vertices):
     # number of vertices
     n = len(vertices)
 
-    # simple subgraph of vertices
-    G = nx.Graph(D.subgraph(vertices))
-
-    # return if is clique and the clique G
-    if G.size() == n*(n - 1)/2:
-        return True, G
-    else:
-        return False, None
+    # return stems
+    return [v for v in vertices if len(set(D.predecessors(v)) | set(D.successors(v))) != n]
 
 
 # remove edges with attribute 'remove: True
