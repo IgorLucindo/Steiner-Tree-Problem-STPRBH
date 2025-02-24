@@ -35,10 +35,10 @@ def save_preprocess_results(results):
     # create dataframe for exporting to xlsx file
     df = pd.DataFrame(results)
     df.columns = pd.MultiIndex.from_tuples([
-        ("Graph1", "n1"),
-        ("Graph1", "m1"),
-        ("Graph2", "n2"),
-        ("Graph2", "m2"),
+        ("D1 (hop-limiting vertices)", "n1"),
+        ("D1 (hop-limiting vertices)", "m1"),
+        ("D2 (removing simplicials)", "n2"),
+        ("D2 (removing simplicials)", "m2"),
         ("Vertex Dec. (%)", ""),
         ("Arc Dec. (%)", "")
     ])

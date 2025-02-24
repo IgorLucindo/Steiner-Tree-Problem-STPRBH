@@ -56,35 +56,33 @@ def bfs_remove_vertices(D, h):
     # compute shortest path lengths from node r
     shortest_paths = nx.single_source_shortest_path_length(D, 'r')
 
-    # create a subgraph with nodes within the hop limit
-    H = D.subgraph([v for v, dist in shortest_paths.items() if dist <= h])
-
-    # return limited graph
-    return H
+    # return hop limit graph
+    return D.subgraph([v for v, dist in shortest_paths.items() if dist <= h])
 
 
-# remove last arcs due to hop-limit and non profitable vertices with dist == h
+# remove last arcs due to hop-limit and non profitable stop vertices
 def remove_last_arcs_and_non_profitable_last_vertices(D, h):
     # Hamid's idea
     # compute shortest path lengths from node r
     shortest_paths = nx.single_source_shortest_path_length(D, 'r')
 
-    remained_vertices = [v for v in D.nodes if (shortest_paths[v] < h) or (shortest_paths[v] == h and D.nodes[v]['revenue'] > 0.5)]
+    # remianed_vertices in graph
+    remained_vertices = []
 
-    # create a subgraph with vertices within the hop limit and last vertice are profitable
-    H = D.subgraph(remained_vertices)
+    for v in D.nodes:
+        # hop limit vertices
+        if shortest_paths[v] < h:
+            remained_vertices.append(v)
+        # hop limit profitable stop vertices
+        elif shortest_paths[v] == h and D.nodes[v]['revenue'] > 0.5:
+            remained_vertices.append(v)
 
-    # remove outgoing arcs of vertices with dist == h
-    shortest_paths = nx.single_source_shortest_path_length(H, 'r')
+            # remove outgoing arcs from 
+            for a in D.out_edges(v):
+                D.edges[a]['removed'] = True
 
-    stop_vertices = [v for v in shortest_paths if shortest_paths[v] == h]
-
-    for v in stop_vertices:
-        for a in H.out_edges(v):
-            H.edges[a]['removed'] = True
-
-    # return graph
-    return H
+    # return prunded graph
+    return D.subgraph(remained_vertices)
 
 
 # get simplicials, remove its non profitable vertices
@@ -107,7 +105,7 @@ def prune_simplicials(D):
             if simplicial_edge_costs >= neighbor_costs:
                 D.nodes[v]['removed'] = True
              
-    # return graph
+    # return prunded graph
     return D
 
 
@@ -135,7 +133,7 @@ def bfs_remove_arcs(D, h):
                 dist_vertex[v_n] = dist_vertex[v] + 1
                 queue.append(v_n)
 
-    # return hop-limited graph
+    # return prunded graph
     return D
 
 
@@ -143,7 +141,8 @@ def bfs_remove_arcs(D, h):
 def preproccess_graph(G, h):
     # preprocess
     D = digraph_transformer(G)
-    D = bfs_remove_arcs(D, h)
+    # D = bfs_remove_arcs(D, h)
+    D = remove_last_arcs_and_non_profitable_last_vertices(D, h)
     D = prune_simplicials(D)
 
     # return preprocessed graph
