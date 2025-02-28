@@ -30,8 +30,11 @@ def save_cycle_results(results, modelname, save_flag):
     df.to_excel(f"results/cycle_counter/{modelname}.xlsx", index=True, index_label="Instance")
 
 
-# save preprocess results
-def save_preprocess_results(results):
+# save comparison of preprocess results
+def save_compare_preprocess_results(results, save_flag):
+    if not save_flag:
+        return
+    
     # create dataframe for exporting to xlsx file
     df = pd.DataFrame(results)
     df.columns = pd.MultiIndex.from_tuples([
@@ -43,4 +46,15 @@ def save_preprocess_results(results):
         ("Arc Dec. (%)", "")
     ])
     df.index = df.index + 1
-    df.to_excel(f"results/preprocess/results.xlsx", index=True, index_label="Instance")
+    df.to_excel(f"results/preprocess/comparison.xlsx", index=True, index_label="Instance")
+
+
+# save simplicials results
+def save_simplicial_results(results, save_flag):
+    if not save_flag:
+        return
+    
+    # create dataframe for exporting to xlsx file
+    df = pd.DataFrame(results, columns=["#tot. cliques", "#tot. non-profitable cliques"])
+    df.index = df.index + 1
+    df.to_excel(f"results/preprocess/simplicials.xlsx", index=True, index_label="Instance")

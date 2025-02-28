@@ -1,42 +1,40 @@
 import networkx as nx
-import random
 import matplotlib.pyplot as plt
-from collections import Counter, deque
+from collections import Counter
 
 
-
-# graph generator
-def graph_generator(n, m):
-    if m < n or m > n*(n-1)/2:
-        raise ValueError("wrong number of edges.")
+# create a simple instance of a graph
+def create_graph_instance():
+    # create graph
+    G = nx.Graph()
+    graph_edges = [('r', 2, {'cost': 1}), (2, 3, {'cost': 1}), (2, 4, {'cost': 1}), (3, 4, {'cost': 1}), (2, 5, {'cost': 1}), (3, 5, {'cost': 1}), (4, 5, {'cost': 1}), 
+                   ('r', 11, {'cost': 1}), (11, 12, {'cost': 1}), (12, 13, {'cost': 1})]
+    G.add_edges_from(graph_edges)
     
-    # create complete graph
-    G = nx.complete_graph(n)
-    
-    edges = list(G.edges())
-    random.shuffle(edges)
-    
-    # removes valid edges
-    while G.number_of_edges() > m:
-        u, v = edges.pop()
-        G.remove_edge(u, v)
-
-        # make sure edge is valid
-        if not nx.is_connected(G) or any(d == 1 for _, d in G.degree()):
-            G.add_edge(u, v)
-
-    # rename r vertex
-    G = nx.relabel_nodes(G, {0: 'r'})
-
-    # add cost and revenue
-    costs = {e: random.randint(11, 20) for e in G.edges}
-    revenues = {v: random.randint(1, 5) for v in G.nodes}
+    # get revenue
+    revenues = {v: 1 for v in G.nodes}
     revenues['r'] = 0
-    nx.set_edge_attributes(G, costs, 'cost')
+    revenues[13] = 0
+    revenues[5] = 0
+    revenues[4] = 0
     nx.set_node_attributes(G, revenues, 'revenue')
 
-    # return the connected graph
-    return G
+    # set removed vertices
+    nx.set_node_attributes(G, {v: False for v in G.nodes}, 'removed')
+
+    # set removed edges
+    nx.set_edge_attributes(G, {e: False for e in G.edges}, 'removed')
+
+
+    # create instance
+    b = 100
+    h = 5
+    num_of_vertices = len(G.nodes)
+    num_of_edges = len(G.edges)
+    instance = [b, h, G, num_of_vertices, num_of_edges]
+
+    # return instance
+    return [instance]
 
 
 # transform graph in digraph
@@ -106,10 +104,11 @@ def get_simplicials(D):
         if is_clique(G):
             # get stems from clique
             stems = get_stems_from_clique(D, neighbors)
-            simplicials_dict.setdefault(tuple(stems), []).append(v)
-
-    # get number of 1-stems, 2-stems, ...
-    simplicials_dict['number'] = len(simplicials_dict)
+            # append to simplicials dict
+            simplicials_dict.setdefault(tuple(stems), {
+                'non_profitable_simplicials': [],
+                'number_of_vertices': len(neighbors) + 1
+            })['non_profitable_simplicials'].append(v)
              
     # return prunded graph
     return simplicials_dict
@@ -147,16 +146,17 @@ def prune_simplicials(D):
 
 
 # preprocess graph for model input
-def preproccess_graph(G, h):
+def preproccess_graph(G, h, return_simplicials_flag=False):
     # preprocess
     D = digraph_transformer(G)
     D = hop_limit_arcs(D, h)
     simplicials_dict = get_simplicials(D)
-    print(simplicials_dict)
     # D = prune_simplicials(simplicials_dict)
 
     # return preprocessed graph
-    return D
+    if return_simplicials_flag:
+        return D, simplicials_dict
+    return D, None
 
 
 # check if G is clique
