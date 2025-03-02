@@ -8,7 +8,7 @@ def base_model_sol(D, b):
     # create model
     model = gp.Model(name="base model")
 
-    # Disable all output
+    # disable all output
     model.setParam('OutputFlag', 0)
 
     # add variables
