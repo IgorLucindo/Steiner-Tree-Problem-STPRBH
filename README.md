@@ -1,4 +1,4 @@
-# Steiner-Tree-Problem-STPRBH
+# Steiner Tree Problem with Revenue, Budget and Hop-Constraints Solver
 
 Code for solving Steiner tree problem with revenue, budget and hop-constraints (STPRBH)
 
